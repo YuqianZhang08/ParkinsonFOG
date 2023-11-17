@@ -205,7 +205,7 @@ keep_prob=tf.placeholder(tf.float32)
 init = tf.global_variables_initializer()
 config = tf.ConfigProto()
 saver = tf.train.Saver()  
-#config.gpu_options.allow_growth = True
+config.gpu_options.allow_growth = True
 with tf.Session(config=config) as sess:
     sess.run(init)
     step = 0
@@ -214,15 +214,15 @@ with tf.Session(config=config) as sess:
     predd=[]
     while step <800:             #1000
     #    train_cost=0
-        for i in range(n_group):    #加了_,batch_cost=
+        for i in range(n_group):    
             sess.run(train_op, feed_dict={x: train_fea[i],y: train_label[i]})
          #   batch_cost=sess.run(cost,feed_dict={x: train_fea[i],y: train_label[i]})
         #    train_cost+=batch_cost/n_group
         
   #      if (step+1)%1==0:  
           
-        # %04d: % 转义说明符 ; 0 指以0填充前面的位数 ；4 四位数； d 十进制整数  
-        # "{:.9f}".format(train_cost)  以保留小数点后9位显示train_cost  
+        
+      
 #            print("Epoch :","%04d"%(step+1),"Train_cost","{:9f}".format(train_cost))  
         
     
