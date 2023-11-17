@@ -35,7 +35,7 @@ print (all.shape)
 
 
 def compute_accuracy(prediction, v_xs, v_ys):
-    y_pre = sess.run(prediction, feed_dict={x: v_xs, keep_prob: 1})  # 这里的keep_prob是保留概率，即我们要保留的RELU的结果所占比例
+    y_pre = sess.run(prediction, feed_dict={x: v_xs, keep_prob: 1})  
     correct_prediction = tf.equal(tf.argmax(y_pre, 1), tf.argmax(v_ys, 1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     result = sess.run(accuracy, feed_dict={x: v_xs, y: v_ys, keep_prob: 1})
@@ -154,13 +154,10 @@ X = tf.reshape(x, [-1, n_inputs])
 # Define weights
 lstm_cell = tf.contrib.rnn.BasicLSTMCell(num_units=hidden_size, forget_bias=1.0, state_is_tuple=True)
 
-# **步骤3：添加 dropout layer, 一般只设置 output_keep_prob
 lstm_cell = tf.contrib.rnn.DropoutWrapper(cell=lstm_cell, input_keep_prob=1.0, output_keep_prob=keep_prob)
 
-# **步骤4：调用 MultiRNNCell 来实现多层 LSTM
 mlstm_cell = tf.contrib.rnn.MultiRNNCell([lstm_cell] * layer_num, state_is_tuple=True)
 
-# **步骤5：用全零来初始化state
 init_state = mlstm_cell.zero_state(batch_size, dtype=tf.float32)
 outputs, state = tf.nn.dynamic_rnn(mlstm_cell, inputs=X, initial_state=init_state, time_major=False)
 W = tf.Variable(tf.truncated_normal([hidden_size, n_classes], stddev=0.1), dtype=tf.float32)
@@ -196,7 +193,7 @@ with tf.Session(config=config) as sess:
    acc_his = []
    start = time.clock()
    while step < 2000:
-       for j in range(n_group):  # 加了_,batch_cost=
+       for j in range(n_group):  
             sess.run(train_op, feed_dict={x: train_fea[j], y: train_label[j],keep_prob: 0.5})
             if (i+1)%200 == 0:
                train_accuracy = sess.run(accuracy, feed_dict={x: train_fea[j], y: train_label[j], keep_prob: 1.0})
